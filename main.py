@@ -13,6 +13,7 @@ def get_page():
     Response object
         The data on the page
     """
+
     name = input("Player name: ")
 
     # Check if input name is a valid name
@@ -35,8 +36,8 @@ def solo_data():
 
     Parameters
     ----------
-    name : str
-        The name of the player
+    page : Response object
+        The match history page of one player
 
     Returns
     -------
@@ -62,3 +63,8 @@ def duo_data():
         comparative stats
     """
     return
+
+if __name__ == "__main__":
+    player_page = get_page()
+    data = solo_data(player_page)
+    print(data)
