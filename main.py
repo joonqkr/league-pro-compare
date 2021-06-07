@@ -1,6 +1,7 @@
-# import requests
+# import BeautifulSoup, Selenium, and pandas
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import pandas as pd
 
 most_recent_tourn = "LCK 2020 Summer"
 
@@ -47,9 +48,11 @@ def solo_data(driver):
         The player's stats (KDA, champion usage, itemizations, etc.)
     """
 
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    table = soup.find_all('table', class_='mhplayer')
-    print(table)
+    dfs = pd.read_html(driver.page_source)
+    # soup = BeautifulSoup(driver.page_source, 'html.parser')
+    # table = soup.find_all('table', class_='mhplayer')
+    # print(table)
+    print(dfs)
 
     driver.quit()
     return
