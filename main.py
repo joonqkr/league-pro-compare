@@ -30,9 +30,16 @@ def get_df():
 
     dfs = pd.read_html(url)
 
-    print(dfs[0])
+    # take first table on the page
+    df = dfs[0]
 
-    return dfs[0]
+    # filter table to just have necessary columns and rows
+    df = df.droplevel(0, 1)
+    df = df.dropna(subset=['VOD'])
+    df = df.drop(df.shape[0] - 1)
+    df = df.dropna('columns')
+
+    return df
 
 def solo_data(df):
     """Returns data on one player when only one player is input
@@ -71,8 +78,6 @@ def duo_data():
     return
 
 if __name__ == "__main__":
-    # player_page = get_page()
-    # data = solo_data(player_page)
 
-    get_df()
-    # print(data)
+    df = get_df()
+    print(df)
