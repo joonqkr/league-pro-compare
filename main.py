@@ -62,9 +62,14 @@ def solo_data(df):
         The player's stats (KDA, champion usage, itemizations, etc.)
     """
 
+    player_stats = {}
 
+    num_data = df.sum(0, numeric_only=True)
 
-    return
+    # KDA
+    player_stats['KDA'] = round((num_data.get('K') + num_data.get('A')) / num_data.get('D'), 2)
+
+    return player_stats
 
 def duo_data():
     """Returns comparative data on two players
@@ -87,4 +92,5 @@ def duo_data():
 if __name__ == "__main__":
 
     df = get_df()
-    print(df.sum(0, numeric_only=True))
+    stats = solo_data(df)
+    print(stats)
