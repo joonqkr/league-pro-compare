@@ -1,6 +1,7 @@
 # import pandas
 import pandas as pd
 
+# hard coded tournament
 most_recent_tourn = "LCK%202020%20Summer"
 
 def get_df():
@@ -38,6 +39,12 @@ def get_df():
     df = df.dropna(subset=['VOD'])
     df = df.drop(df.shape[0] - 1)
     df = df.dropna('columns')
+
+    # change string elements to numeric
+    df['K'] = pd.to_numeric(df['K'])
+    df['D'] = pd.to_numeric(df['D'])
+    df['A'] = pd.to_numeric(df['A'])
+    df['CS'] = pd.to_numeric(df['CS'])
 
     return df
 
@@ -80,4 +87,4 @@ def duo_data():
 if __name__ == "__main__":
 
     df = get_df()
-    print(df)
+    print(df.sum(0, numeric_only=True))
