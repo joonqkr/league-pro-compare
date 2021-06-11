@@ -95,18 +95,19 @@ def solo_data(match_df, champ_df):
     player_stats = {}
 
     match_num_rows = match_df.shape[0]
-    num_data = match_df.sum(0, numeric_only=True)
+    sum_data = match_df.sum(0, numeric_only=True)
 
     # Average KDA
-    player_stats['KDA'] = round((num_data.get('K') + num_data.get('A')) / num_data.get('D'), 2)
+    player_stats['KDA'] = round((sum_data.get('K') + sum_data.get('A')) / sum_data.get('D'), 2)
 
     # Average CS/M
     csm_per_game = match_df['CS'] / match_df['Len']
     player_stats['CS/M'] = round(sum(csm_per_game) / match_num_rows, 1)
 
     # Average Gold
+    player_stats['Gold'] = round(sum_data.get('G') / match_num_rows, 1)
 
-    # Win/Loss Ratio
+    # Win/Loss Ratio - more team-based so might not do
 
     # Most Played Champions
 
