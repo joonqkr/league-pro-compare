@@ -57,7 +57,7 @@ def get_dfs():
         minute = math.floor(original)
         seconds = (original - minute) / 0.6
         length = minute + seconds
-        match_df['Len'][i] = length
+        match_df.at[i, 'Len'] = length
 
     # filter champ table to just have necessary columns
     champ_df = champ_df.droplevel(0, 1)
@@ -91,13 +91,15 @@ def solo_data(match_df, champ_df):
     """
 
     player_stats = {}
-
+    num_rows = match_df.shape[0]
     num_data = match_df.sum(0, numeric_only=True)
 
     # Average KDA
     player_stats['KDA'] = round((num_data.get('K') + num_data.get('A')) / num_data.get('D'), 2)
 
-    # Average CSPM
+    # Average CS/M
+    csm_per_game = match_df['CS'] / match_df['Len']
+    player_stats['CS/M'] = round(sum(csm_per_game) / num_rows, 1)
 
     # Average Gold
 
