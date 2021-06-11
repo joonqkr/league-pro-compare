@@ -107,7 +107,12 @@ def solo_data(match_df, champ_df):
     # Average Gold
     player_stats['Gold'] = round(sum_data.get('G') / match_num_rows, 1)
 
-    # Win/Loss Ratio - more team-based so might not do
+    # Winrate, based on individual games
+    win_df = match_df.loc[match_df['W/L'] == 'Win']
+    lose_df = match_df.loc[match_df['W/L'] == 'Loss']
+    wins = win_df.shape[0]
+    losses = lose_df.shape[0]
+    player_stats['Winrate'] = round(wins / (wins + losses), 4) * 100
 
     # Top 3 Most Played Champions
     champions = []
