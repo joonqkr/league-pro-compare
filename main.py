@@ -1,6 +1,8 @@
 # import pandas
 import pandas as pd
 
+import math
+
 # hard coded tournament
 most_recent_tourn = "LCK%202020%20Summer"
 
@@ -51,7 +53,11 @@ def get_dfs():
     match_df['CS'] = pd.to_numeric(match_df['CS'])
     match_df['Len'] = pd.to_numeric(match_df['Len'])
     for i in range(len(match_df['Len'])):
-        print(match_df['Len'][i])
+        original = match_df['Len'][i]
+        minute = math.floor(original)
+        seconds = (original - minute) / 0.6
+        length = minute + seconds
+        match_df['Len'][i] = length
 
     # filter champ table to just have necessary columns
     champ_df = champ_df.droplevel(0, 1)
