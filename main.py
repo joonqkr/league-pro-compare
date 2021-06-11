@@ -11,8 +11,10 @@ def get_dfs():
 
     Returns
     -------
-    Pandas data frame
+    match_df : Pandas data frame
         The data frame of the match history of input player and tournament
+    champ_df : Pandas data frame
+        The data frame of the champion stats of input player and tournament
     """
 
     name = input("Player name: ")
@@ -40,16 +42,22 @@ def get_dfs():
     match_df = match_df.dropna(subset=['VOD'])
     match_df = match_df.drop(match_df.shape[0] - 1)
     match_df = match_df.dropna('columns')
+    match_df = match_df.replace(to_replace =':', value = '.', regex = True)
 
     # change string elements to numeric
     match_df['K'] = pd.to_numeric(match_df['K'])
     match_df['D'] = pd.to_numeric(match_df['D'])
     match_df['A'] = pd.to_numeric(match_df['A'])
     match_df['CS'] = pd.to_numeric(match_df['CS'])
+    match_df['Len'] = pd.to_numeric(match_df['Len'])
+    for i in range(len(match_df['Len'])):
+        print(match_df['Len'][i])
 
-    # filter champ table to just have necessary columns and rows
+    # filter champ table to just have necessary columns
     champ_df = champ_df.droplevel(0, 1)
     champ_df = champ_df.droplevel(0, 1)
+    champ_df = champ_df.drop(champ_df.shape[0] - 1)
+    champ_df = champ_df.drop(champ_df.shape[0] - 1)
 
     # change string elements to numeric
     champ_df['G'] = pd.to_numeric(champ_df['G'])
@@ -65,8 +73,10 @@ def solo_data(match_df, champ_df):
 
     Parameters
     ----------
-    df : Pandas data frame
-        The driver that has url of page
+    match_df : Pandas data frame
+        The data frame of the match history of input player and tournament
+    champ_df : Pandas data frame
+        The data frame of the champion stats of input player and tournament
 
     Returns
     -------
