@@ -4,7 +4,7 @@ import pandas as pd
 # hard coded tournament
 most_recent_tourn = "LCK%202020%20Summer"
 
-def get_df():
+def get_dfs():
     """Asks the user for a player name and returns data frame of match
     history of that player
     (player name, tournament name)
@@ -32,23 +32,35 @@ def get_df():
     dfs = pd.read_html(url)
 
     # take first table on the page
-    df = dfs[0]
+    match_df = dfs[0]
+    champ_df = dfs[1]
 
-    # filter table to just have necessary columns and rows
-    df = df.droplevel(0, 1)
-    df = df.dropna(subset=['VOD'])
-    df = df.drop(df.shape[0] - 1)
-    df = df.dropna('columns')
+    # filter match history table to just have necessary columns and rows
+    match_df = match_df.droplevel(0, 1)
+    match_df = match_df.dropna(subset=['VOD'])
+    match_df = match_df.drop(match_df.shape[0] - 1)
+    match_df = match_df.dropna('columns')
 
     # change string elements to numeric
-    df['K'] = pd.to_numeric(df['K'])
-    df['D'] = pd.to_numeric(df['D'])
-    df['A'] = pd.to_numeric(df['A'])
-    df['CS'] = pd.to_numeric(df['CS'])
+    match_df['K'] = pd.to_numeric(match_df['K'])
+    match_df['D'] = pd.to_numeric(match_df['D'])
+    match_df['A'] = pd.to_numeric(match_df['A'])
+    match_df['CS'] = pd.to_numeric(match_df['CS'])
 
-    return df
+    # filter champ table to just have necessary columns and rows
+    champ_df = champ_df.droplevel(0, 1)
+    champ_df = champ_df.droplevel(0, 1)
 
-def solo_data(df):
+    # change string elements to numeric
+    champ_df['G'] = pd.to_numeric(champ_df['G'])
+    champ_df['W'] = pd.to_numeric(champ_df['W'])
+    champ_df['L'] = pd.to_numeric(champ_df['L'])
+    champ_df['KDA'] = pd.to_numeric(champ_df['KDA'])
+    champ_df['CS/M'] = pd.to_numeric(champ_df['CS/M'])
+
+    return match_df, champ_df
+
+def solo_data(match_df, champ_df):
     """Returns data on one player when only one player is input
 
     Parameters
@@ -64,10 +76,20 @@ def solo_data(df):
 
     player_stats = {}
 
-    num_data = df.sum(0, numeric_only=True)
+    num_data = match_df.sum(0, numeric_only=True)
 
-    # KDA
+    # Average KDA
     player_stats['KDA'] = round((num_data.get('K') + num_data.get('A')) / num_data.get('D'), 2)
+
+    # Average CSPM
+
+    # Average Gold
+
+    # Win/Loss Ratio
+
+    # Most Played Champions
+
+    # High Win-Rate Champions
 
     return player_stats
 
@@ -91,6 +113,6 @@ def duo_data():
 
 if __name__ == "__main__":
 
-    df = get_df()
-    stats = solo_data(df)
+    match_df, champ_df = get_dfs()
+    stats = solo_data(match_df, champ_df)
     print(stats)
