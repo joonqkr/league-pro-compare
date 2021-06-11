@@ -45,6 +45,7 @@ def get_dfs():
     match_df = match_df.drop(match_df.shape[0] - 1)
     match_df = match_df.dropna('columns')
     match_df = match_df.replace(to_replace =':', value = '.', regex = True)
+    match_df = match_df.replace(to_replace ='k', value = '', regex = True)
 
     # change string elements to numeric
     match_df['K'] = pd.to_numeric(match_df['K'])
@@ -58,6 +59,7 @@ def get_dfs():
         seconds = (original - minute) / 0.6
         length = minute + seconds
         match_df.at[i, 'Len'] = length
+    match_df['G'] = pd.to_numeric(match_df['G'])
 
     # filter champ table to just have necessary columns
     champ_df = champ_df.droplevel(0, 1)
@@ -91,7 +93,8 @@ def solo_data(match_df, champ_df):
     """
 
     player_stats = {}
-    num_rows = match_df.shape[0]
+
+    match_num_rows = match_df.shape[0]
     num_data = match_df.sum(0, numeric_only=True)
 
     # Average KDA
@@ -99,7 +102,7 @@ def solo_data(match_df, champ_df):
 
     # Average CS/M
     csm_per_game = match_df['CS'] / match_df['Len']
-    player_stats['CS/M'] = round(sum(csm_per_game) / num_rows, 1)
+    player_stats['CS/M'] = round(sum(csm_per_game) / match_num_rows, 1)
 
     # Average Gold
 
