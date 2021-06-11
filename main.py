@@ -109,9 +109,11 @@ def solo_data(match_df, champ_df):
 
     # Win/Loss Ratio - more team-based so might not do
 
-    # Most Played Champions
-
-    # High Win-Rate Champions
+    # Top 3 Most Played Champions
+    champions = []
+    for i in range(3):
+        champions.append(champ_df.at[i, 'Champion'])
+    player_stats['Champions'] = champions
 
     return player_stats
 
