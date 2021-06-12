@@ -5,7 +5,8 @@ import math
 
 def get_inputs():
     """Asks the user whether they want
-        1. a single player's data or comparative data between two players
+        1. a single player's data or comparative data between
+        two players
         2. name(s) of the player(s)
         3. tournament of data
 
@@ -18,13 +19,25 @@ def get_inputs():
     tournament : str
         The name of the tournament
     """
+    duo_yn = input("Enter 1 for stats on one player, 2 for " +
+    "comparative stats between 2 players: ")
 
-    duo = False
-    name = []
-    name.append(input("Player name: "))
-    tournament = "LCK%202020%20Summer"
+    while duo_yn != '1' and duo_yn != '2':
+        duo_yn = input("Error: invalid input. Only enter 1 or 2. " +
+        "Enter 1 for stats on one player, 2 for comparative stats " +
+        "between 2 players: ")
 
-    # tourn = input("Tournament name: ")
+    names = []
+    if duo_yn == '1':
+        duo = False
+        names.append(input("Player name: "))
+    else:
+        duo = True
+        names.append(input("Player 1 name: "))
+        names.append(input("Player 2 name: "))
+
+    tournament = input("Tournament name: ")
+    tournament = tournament.replace(' ', '%20')
 
     # Check if input name is a valid name
     # if :
