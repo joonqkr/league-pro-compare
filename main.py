@@ -3,23 +3,26 @@ import pandas as pd
 
 import math
 
-# hard coded tournament
-most_recent_tourn = "LCK%202020%20Summer"
-
-def get_dfs():
-    """Asks the user for a player name and returns data frame of match
-    history of that player
-    (player name, tournament name)
+def get_inputs():
+    """Asks the user whether they want
+        1. a single player's data or comparative data between two players
+        2. name(s) of the player(s)
+        3. tournament of data
 
     Returns
     -------
-    match_df : Pandas data frame
-        The data frame of the match history of input player and tournament
-    champ_df : Pandas data frame
-        The data frame of the champion stats of input player and tournament
+    duo : boolean
+        Whether the user wants comparative stats
+    names : str array
+        The name(s) of the player(s)
+    tournament : str
+        The name of the tournament
     """
 
-    name = input("Player name: ")
+    duo = False
+    name = []
+    name.append(input("Player name: "))
+    tournament = "LCK%202020%20Summer"
 
     # tourn = input("Tournament name: ")
 
@@ -30,8 +33,31 @@ def get_dfs():
     #     if yn_response == alternative:
     #         name = alternative
 
+    return duo, names, tournament
+
+def get_dfs(name, tournament):
+    """Uses the parameter information to retrieve the desired data and
+    store in a data frame.
+
+    Parameters
+    ----------
+    duo : boolean
+        Whether the user wants comparative stats
+    names : str array
+        The name(s) of the player(s)
+    tournament : str
+        The name of the tournament
+
+    Returns
+    -------
+    match_df : Pandas data frame
+        The data frame of the match history of input player and tournament
+    champ_df : Pandas data frame
+        The data frame of the champion stats of input player and tournament
+    """
+
     # url with player name and tournament
-    url = f'https://lol.fandom.com/wiki/Special:RunQuery/MatchHistoryPlayer?pfRunQueryFormName=MatchHistoryPlayer&MHP%5Bpreload%5D=Player&MHP%5Btournament%5D={most_recent_tourn}&MHP%5Blink%5D={name}&MHP%5Bchampion%5D=&MHP%5Brole%5D=&MHP%5Bteam%5D=&MHP%5Bpatch%5D=&MHP%5Byear%5D=&MHP%5Bregion%5D=&MHP%5Btournamentlevel%5D=&MHP%5Brecord%5D=&MHP%5Brecordorder%5D%5Bis_checkbox%5D=true&MHP%5Bitem%5D=&MHP%5Bjungleitem%5D=&MHP%5Bjungleenchant%5D=&MHP%5Brune%5D=&MHP%5Blimit%5D=50&MHP%5Bwhere%5D=&MHP%5Bincludelink%5D%5Bis_checkbox%5D=true&MHP%5Btextonly%5D%5Bis_checkbox%5D=true&wpRunQuery=Run+query&pf_free_text='
+    url = f'https://lol.fandom.com/wiki/Special:RunQuery/MatchHistoryPlayer?pfRunQueryFormName=MatchHistoryPlayer&MHP%5Bpreload%5D=Player&MHP%5Btournament%5D={tournament}&MHP%5Blink%5D={name}&MHP%5Bchampion%5D=&MHP%5Brole%5D=&MHP%5Bteam%5D=&MHP%5Bpatch%5D=&MHP%5Byear%5D=&MHP%5Bregion%5D=&MHP%5Btournamentlevel%5D=&MHP%5Brecord%5D=&MHP%5Brecordorder%5D%5Bis_checkbox%5D=true&MHP%5Bitem%5D=&MHP%5Bjungleitem%5D=&MHP%5Bjungleenchant%5D=&MHP%5Brune%5D=&MHP%5Blimit%5D=50&MHP%5Bwhere%5D=&MHP%5Bincludelink%5D%5Bis_checkbox%5D=true&MHP%5Btextonly%5D%5Bis_checkbox%5D=true&wpRunQuery=Run+query&pf_free_text='
 
     dfs = pd.read_html(url)
 
@@ -77,7 +103,7 @@ def get_dfs():
     return match_df, champ_df
 
 def solo_data(match_df, champ_df):
-    """Returns data on one player when only one player is input
+    """Returns data on one player when only one player is input.
 
     Parameters
     ----------
@@ -122,26 +148,36 @@ def solo_data(match_df, champ_df):
 
     return player_stats
 
-def duo_data():
+def duo_data(match_df1, champ_df1, match_df2, champ_df2):
     """Returns comparative data on two players
 
     Parameters
     ----------
-    name_one : str
-        The name of the player 1
-    name_two : str
-        The name of player 2
+    match_df1 : Pandas data frame
+        The data frame of the match history of player1
+    champ_df1 : Pandas data frame
+        The data frame of the champion stats of player1
+    match_df2 : Pandas data frame
+        The data frame of the match history of player2
+    champ_df2 : Pandas data frame
+        The data frame of the champion stats of player2
 
     Returns
     -------
-    dictionary
-        Dictionary containing each player's stats as well as
-        comparative stats
+    comp_stats : dictionary
+        Dictionary containing comparative stats between player1 and
+        player2
     """
     return
 
 if __name__ == "__main__":
+    duo, names, tournament = get_inputs()
+    if duo:
+        p1_match, p1_champ = get_dfs(names[0], tournament)
+        p2_match, p2_champ = get_dfs(names[1], tournament)
+        stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
+    else:
+        match, champ = get_dfs(names[0], tournament)
+        stats = solo_data(match, champ)
 
-    match_df, champ_df = get_dfs()
-    stats = solo_data(match_df, champ_df)
     print(stats)
