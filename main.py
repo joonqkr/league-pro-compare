@@ -19,14 +19,15 @@ def get_inputs():
     tournament : str
         The name of the tournament
     """
+    # Asks whether user wants solo or duo data
     duo_yn = input("Enter 1 for stats on one player, 2 for " +
     "comparative stats between 2 players: ")
-
     while duo_yn != '1' and duo_yn != '2':
         duo_yn = input("Error: invalid input. Only enter 1 or 2. " +
         "Enter 1 for stats on one player, 2 for comparative stats " +
         "between 2 players: ")
 
+    # Asks for player name(s)
     names = []
     if duo_yn == '1':
         duo = False
@@ -36,6 +37,7 @@ def get_inputs():
         names.append(input("Player 1 name: "))
         names.append(input("Player 2 name: "))
 
+    # Asks for tournament name
     tournament = input("Tournament name: ")
     tournament = tournament.replace(' ', '%20')
 
@@ -182,9 +184,12 @@ def duo_data(match_df1, champ_df1, match_df2, champ_df2):
         player2
     """
     comp_stats = {}
+
+    # Calling solo_data on each player's data frames
     p1_overall = solo_data(match_df1, champ_df1)
     p2_overall = solo_data(match_df2, champ_df2)
 
+    # Overall Stats Compared
     comp_stats['Overall KDA'] = [p1_overall['KDA'], p2_overall['KDA']]
     comp_stats['Overall CS/M'] = [p1_overall['CS/M'], p2_overall['CS/M']]
     comp_stats['Overall Gold'] = [p1_overall['Gold'], p2_overall['Gold']]
