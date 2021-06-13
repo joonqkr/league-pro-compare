@@ -30,17 +30,36 @@ List the ready features here:
 - Compare two players' stats and see which common champions they have in common
 
 ## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
+`requirements.txt` is located in the root directory.
 
-Proceed to describe how to install / setup one's local environment / get started with the project.
+From the root directory, do:
+`pip install -r requirements.txt`
 
 
 ## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
+First, run from the root directory:
+`python main.py`
 
-`write-your-code-here`
+- To get stats for one player, enter `1`, the name of the player, and the name of the tournament.
+  - Example:
+    ```
+    Enter 1 for stats on one player, 2 for comparative stats between 2 players: 1
+    Player name: Chovy
+    Tournament name: LCK 2020 Summer
+    ```
+    This returns:
+    `{'KDA': 4.23, 'CS/M': 9.8, 'Gold': 14.3, 'Winrate': 71.11, 'Champions': ['Azir', 'Twisted Fate', 'Sett']}`
 
+- To get comparative stats between two players, enter `2`, the names of the players, and the name of the tournament.
+  - Example:
+    ```
+    Enter 1 for stats on one player, 2 for comparative stats between 2 players: 2
+    Player 1 name: Bjergsen
+    Player 2 name: Jensen
+    Tournament name: LCS 2020 Summer
+    ```
+    This returns:
+    `{'Overall KDA': [6.46, 5.74], 'Overall CS/M': [8.7, 9.3], 'Overall Gold': [14.2, 15.3], 'Overall Winrate': [66.67, 83.33], 'Common Top 5 Champions': ['Orianna', 'LeBlanc', 'Syndra', 'Fiddlesticks', 'Twisted Fate']}`
 
 ## Project Status
 Project is: _in progress_.
