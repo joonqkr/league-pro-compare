@@ -69,9 +69,12 @@ Project is: _in progress_.
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
+- Check validity of inputs
+- Resolve problems from when two players have the same game name
+- Allow user to choose alternative input if original input is invalid
 
 To do:
-- Feature to be added 1
-- Feature to be added 2
+- Generate head-to-head stats between two players
+- Output stats in table format
+- Stats over multiple tournaments / all tournaments
+- Set up website where the user can use the program
