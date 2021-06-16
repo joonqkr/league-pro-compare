@@ -74,7 +74,6 @@ Room for improvement:
 - Allow user to choose alternative input if original input is invalid
 
 To do:
-- Generate head-to-head stats between two players
 - Output stats in table format
 - Stats over multiple tournaments / all tournaments
 - Set up website where the user can use the program

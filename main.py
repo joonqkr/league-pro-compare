@@ -136,9 +136,9 @@ def solo_data(match_df, champ_df):
     player_stats = {}
 
     match_num_rows = match_df.shape[0]
+    sum_data = match_df.sum(0, numeric_only=True)
 
     # Average KDA
-    sum_data = match_df.sum(0, numeric_only=True)
     player_stats['KDA'] = round((sum_data.get('K') + sum_data.get('A')) / sum_data.get('D'), 2)
 
     # Average CS/M
@@ -198,23 +198,32 @@ def duo_data(match_df1, champ_df1, match_df2, champ_df2):
 
     # head-to-head match match history
     h2h = pd.merge(match_df1, match_df2, on=['Date', 'Len'], suffixes=('_1', '_2'))
+    match_num_rows = h2h.shape[0]
+    sum_data = h2h.sum(0, numeric_only=True)
 
     # Head-to-Head Win/Loss
-    p1_wl_df = match_df.loc[match_df['W/L_1'] == 'Win']
-    p2_wl_df = match_df.loc[match_df['W/L_2'] == 'Win']
+    p1_wl_df = h2h.loc[h2h['W/L_1'] == 'Win']
+    p2_wl_df = h2h.loc[h2h['W/L_2'] == 'Win']
     p1_wins = p1_wl_df.shape[0]
     p2_wins = p2_wl_df.shape[0]
     comp_stats['Head-to-head score'] = [p1_wins, p2_wins]
 
     # Head-to-Head KDA
-    sum_data = h2h.sum(0, numeric_only=True)
     p1_kda = round((sum_data.get('K_1') + sum_data.get('A_1')) / sum_data.get('D_1'), 2)
     p2_kda = round((sum_data.get('K_2') + sum_data.get('A_2')) / sum_data.get('D_2'), 2)
     comp_stats['Head-to-head KDA'] = [p1_kda, p2_kda]
 
     # Head-to-Head CS/M
+    p1_csm_pg = h2h['CS_1'] / h2h['Len']
+    p2_csm_pg = h2h['CS_2'] / h2h['Len']
+    p1_csm = round(sum(p1_csm_pg) / match_num_rows, 1)
+    p2_csm = round(sum(p2_csm_pg) / match_num_rows, 1)
+    comp_stats['Head-to-head CS/M'] = [p1_csm, p2_csm]
 
     # Head-to-Head Gold
+    p1_gold = round(sum_data.get('G_1') / match_num_rows, 1)
+    p2_gold = round(sum_data.get('G_2') / match_num_rows, 1)
+    comp_stats['Head-to-head Gold'] = [p1_gold, p2_gold]
 
     return comp_stats
 
