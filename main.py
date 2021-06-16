@@ -196,6 +196,10 @@ def duo_data(match_df1, champ_df1, match_df2, champ_df2):
     comp_stats['Overall Winrate'] = [p1_overall['Winrate'], p2_overall['Winrate']]
     comp_stats['Common Top 5 Champions'] = list(set(p1_overall['Champions']).intersection(p1_overall['Champions']))
 
+    # head-to-head match match history
+    h2h = pd.merge(match_df1, match_df2, on=['Date', 'Len'], suffixes=('_1', '_2'))
+    print(h2h)
+
     return comp_stats
 
 if __name__ == "__main__":
