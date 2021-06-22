@@ -133,12 +133,14 @@ def get_tourns(name):
 
     dfs = pd.read_html(url)
 
-    # take first table on the page
-    match_df = dfs[0]
-    champ_df = dfs[1]
+    # get player's tournament history
+    history = dfs[13]
+    history = history.droplevel(0, 1)
 
+    # convert column values into list
+    tourn = history['Event'].values.tolist()
 
-    return tourns
+    return tourn
 
 def solo_data(match_df, champ_df):
     """Returns data on one player when only one player is input.
@@ -251,13 +253,16 @@ def duo_data(match_df1, champ_df1, match_df2, champ_df2):
     return comp_stats
 
 if __name__ == "__main__":
-    duo, names, tournament = get_inputs()
-    if duo:
-        p1_match, p1_champ = get_dfs(names[0], tournament)
-        p2_match, p2_champ = get_dfs(names[1], tournament)
-        stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
-    else:
-        match, champ = get_dfs(names[0], tournament)
-        stats = solo_data(match, champ)
+    tourn = get_tourns("ShowMaker")
+    print(tourn)
 
-    print(stats)
+    # duo, names, tournament = get_inputs()
+    # if duo:
+    #     p1_match, p1_champ = get_dfs(names[0], tournament)
+    #     p2_match, p2_champ = get_dfs(names[1], tournament)
+    #     stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
+    # else:
+    #     match, champ = get_dfs(names[0], tournament)
+    #     stats = solo_data(match, champ)
+    #
+    # print(stats)
