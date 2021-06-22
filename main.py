@@ -55,10 +55,8 @@ def get_dfs(name, tournament):
 
     Parameters
     ----------
-    duo : boolean
-        Whether the user wants comparative stats
-    names : str array
-        The name(s) of the player(s)
+    names : str
+        The name of the player
     tournament : str
         The name of the tournament
 
