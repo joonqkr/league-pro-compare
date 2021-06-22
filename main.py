@@ -1,6 +1,5 @@
 # import pandas
 import pandas as pd
-
 import math
 
 def get_inputs():
@@ -116,6 +115,32 @@ def get_dfs(name, tournament):
     champ_df['CS/M'] = pd.to_numeric(champ_df['CS/M'])
 
     return match_df, champ_df
+
+def get_tourns(name):
+    """Returns all the tournaments the named player has played in.
+
+    Parameters
+    ----------
+    names : str array
+        The name of the player
+
+    Returns
+    -------
+    tourns : str array
+        The list of tournaments the player has played in
+    """
+
+    # url with player name
+    url = f'https://lol.fandom.com/wiki/{name}'
+
+    dfs = pd.read_html(url)
+
+    # take first table on the page
+    match_df = dfs[0]
+    champ_df = dfs[1]
+
+
+    return tourns
 
 def solo_data(match_df, champ_df):
     """Returns data on one player when only one player is input.
