@@ -40,21 +40,22 @@ def get_inputs():
     # or just one tournament
     tourn_all = input("Enter 1 for all-time stats, 2 for " +
     "one-tournament stats: ")
-    while tourn_all != '1' and duo_yn != '2':
+    while tourn_all != '1' and tourn_all != '2':
         tourn_all = input("Error: invalid input. Only enter 1 or 2. " +
-        "Enter 1 for all-time stats, 2 for one-tournament stats")
+        "Enter 1 for all-time stats, 2 for one-tournament stats: ")
 
     # Sets up tournaments
     tournaments = []
     if tourn_all == '1':
         tournaments.append(get_tourns(names[0]))
-        tournaments.append(get_tourns(names[1]))
+        if duo:
+            tournaments.append(get_tourns(names[1]))
     else:
         tourn = input("Tournament name: ")
         tourn = tourn.replace(' ', '%20')
-        tournaments.append(tourn)
+        tournaments.append([tourn])
         if duo:
-            tournaments.append(tourn)
+            tournaments.append([tourn])
 
     # Check if input name is a valid name
     # if :
@@ -154,9 +155,17 @@ def get_tourns(name):
     history = history.droplevel(0, 1)
 
     # convert column values into list
-    tourn = history['Event'].values.tolist()
-    for t in tourn:
-        t = t.replace(' ', '%20')
+    tourns = history['Event'].values.tolist()
+    tourn = []
+    for t in tourns:
+        if "KeSPA" in t:
+            t = t[-4:]
+            t = t + ' lol kespa cup'
+        elif "Worlds" in t:
+            t = t[-4:]
+            t = t + ' season world championship/main event'
+        fixed = t.replace(' ', '%20')
+        tourn.append(fixed)
 
     return tourn
 
@@ -200,6 +209,7 @@ def solo_data(match_df, champ_df):
 
     # Top 3 Most Played Champions
     champions = []
+    print(champ_df.columns)
     for i in range(5):
         champions.append(champ_df.at[i, 'Champion'])
     player_stats['Champions'] = champions
@@ -280,7 +290,7 @@ if __name__ == "__main__":
             champs.append(champ)
         p1_match = pd.concat(matches)
         champs = pd.concat(champs)
-        p1_champ = champs.groupby(by=['Champion'], sort=False).sum()
+        p1_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
         p1_champ = p1_champ.sort_values(by=['G'])
 
         matches, champs = [], []
@@ -290,12 +300,21 @@ if __name__ == "__main__":
             champs.append(champ)
         p2_match = pd.concat(matches)
         champs = pd.concat(champs)
-        p2_champ = champs.groupby(by=['Champion'], sort=False).sum()
+        p2_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
         p2_champ = p2_champ.sort_values(by=['G'])
 
         stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
     else:
-        match, champ = get_dfs(names[0], tournament[0])
-        stats = solo_data(match, champ)
+        matches, champs = [], []
+        for t in tournaments[0]:
+            match, champ = get_dfs(names[0], t)
+            matches.append(match)
+            champs.append(champ)
+        p1_match = pd.concat(matches)
+        champs = pd.concat(champs)
+        p1_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
+        p1_champ = p1_champ.sort_values(by=['G'])
+
+        stats = solo_data(p1_match, p1_champ)
 
     print(stats)
