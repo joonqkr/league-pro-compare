@@ -50,8 +50,9 @@ def get_inputs():
         tournaments.append(get_tourns(names[0]))
         tournaments.append(get_tourns(names[1]))
     else:
-        tournaments.append(input("Tournament name: "))
-        tournaments = tournaments.replace(' ', '%20')
+        tourn = input("Tournament name: ")
+        tourn = tourn.replace(' ', '%20')
+        tournaments.append(tourn)
 
     # Check if input name is a valid name
     # if :
