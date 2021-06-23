@@ -268,16 +268,13 @@ def duo_data(match_df1, champ_df1, match_df2, champ_df2):
     return comp_stats
 
 if __name__ == "__main__":
-    tourn = get_tourns("ShowMaker")
-    print(tourn)
+    duo, names, tournaments = get_inputs()
+    if duo:
+        p1_match, p1_champ = get_dfs(names[0], tournaments[0])
+        p2_match, p2_champ = get_dfs(names[1], tournament[1])
+        stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
+    else:
+        match, champ = get_dfs(names[0], tournament[0])
+        stats = solo_data(match, champ)
 
-    # duo, names, tournament = get_inputs()
-    # if duo:
-    #     p1_match, p1_champ = get_dfs(names[0], tournament)
-    #     p2_match, p2_champ = get_dfs(names[1], tournament)
-    #     stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
-    # else:
-    #     match, champ = get_dfs(names[0], tournament)
-    #     stats = solo_data(match, champ)
-    #
-    # print(stats)
+    print(stats)
