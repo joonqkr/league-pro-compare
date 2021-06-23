@@ -152,6 +152,8 @@ def get_tourns(name):
 
     # convert column values into list
     tourn = history['Event'].values.tolist()
+    for t in tourn:
+        t = t.replace(' ', '%20')
 
     return tourn
 
