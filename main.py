@@ -15,8 +15,8 @@ def get_inputs():
         Whether the user wants comparative stats
     names : str array
         The name(s) of the player(s)
-    tournament : str
-        The name of the tournament
+    tournaments : str array
+        The name(s) of the tournament(s)
     """
     # Asks whether user wants solo or duo data
     duo_yn = input("Enter 1 for stats on one player, 2 for " +
@@ -36,9 +36,22 @@ def get_inputs():
         names.append(input("Player 1 name: "))
         names.append(input("Player 2 name: "))
 
-    # Asks for tournament name
-    tournament = input("Tournament name: ")
-    tournament = tournament.replace(' ', '%20')
+    # Asks whether user wants a player's entire tournment history
+    # or just one tournament
+    tourn_all = input("Enter 1 for all-time stats, 2 for " +
+    "one-tournament stats: ")
+    while tourn_all != '1' and duo_yn != '2':
+        tourn_all = input("Error: invalid input. Only enter 1 or 2. " +
+        "Enter 1 for all-time stats, 2 for one-tournament stats")
+
+    # Sets up tournaments
+    tournaments = []
+    if tourn_all == '1':
+        tournaments.append(get_tourns(names[0]))
+        tournaments.append(get_tourns(names[1]))
+    else:
+        tournaments.append(input("Tournament name: "))
+        tournaments = tournaments.replace(' ', '%20')
 
     # Check if input name is a valid name
     # if :
@@ -47,7 +60,7 @@ def get_inputs():
     #     if yn_response == alternative:
     #         name = alternative
 
-    return duo, names, tournament
+    return duo, names, tournaments
 
 def get_dfs(name, tournament):
     """Uses the parameter information to retrieve the desired data and
