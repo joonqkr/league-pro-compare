@@ -53,6 +53,8 @@ def get_inputs():
         tourn = input("Tournament name: ")
         tourn = tourn.replace(' ', '%20')
         tournaments.append(tourn)
+        if duo:
+            tournaments.append(tourn)
 
     # Check if input name is a valid name
     # if :
@@ -121,10 +123,10 @@ def get_dfs(name, tournament):
 
     # change string elements to numeric
     champ_df['G'] = pd.to_numeric(champ_df['G'])
-    champ_df['W'] = pd.to_numeric(champ_df['W'])
-    champ_df['L'] = pd.to_numeric(champ_df['L'])
-    champ_df['KDA'] = pd.to_numeric(champ_df['KDA'])
-    champ_df['CS/M'] = pd.to_numeric(champ_df['CS/M'])
+    # champ_df['W'] = pd.to_numeric(champ_df['W'])
+    # champ_df['L'] = pd.to_numeric(champ_df['L'])
+    # champ_df['KDA'] = pd.to_numeric(champ_df['KDA'])
+    # champ_df['CS/M'] = pd.to_numeric(champ_df['CS/M'])
 
     return match_df, champ_df
 
@@ -271,8 +273,26 @@ def duo_data(match_df1, champ_df1, match_df2, champ_df2):
 if __name__ == "__main__":
     duo, names, tournaments = get_inputs()
     if duo:
-        p1_match, p1_champ = get_dfs(names[0], tournaments[0])
-        p2_match, p2_champ = get_dfs(names[1], tournament[1])
+        matches, champs = [], []
+        for t in tournaments[0]:
+            match, champ = get_dfs(names[0], t)
+            matches.append(match)
+            champs.append(champ)
+        p1_match = pd.concat(matches)
+        champs = pd.concat(champs)
+        p1_champ = champs.groupby(by=['Champion'], sort=False).sum()
+        p1_champ = p1_champ.sort_values(by=['G'])
+
+        matches, champs = [], []
+        for t in tournaments[1]:
+            match, champ = get_dfs(names[1], t)
+            matches.append(match)
+            champs.append(champ)
+        p2_match = pd.concat(matches)
+        champs = pd.concat(champs)
+        p2_champ = champs.groupby(by=['Champion'], sort=False).sum()
+        p2_champ = p2_champ.sort_values(by=['G'])
+
         stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
     else:
         match, champ = get_dfs(names[0], tournament[0])
