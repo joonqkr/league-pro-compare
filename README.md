@@ -39,7 +39,7 @@ From the root directory, do:
 
 ## Usage
 First, run from the root directory:
-`python main.py`
+`python -m league-pro-compare`
 
 - To get stats for one player, enter `1`, the name of the player, and the name of the tournament.
   - Example:
