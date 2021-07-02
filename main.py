@@ -1,6 +1,7 @@
 # import pandas
 import pandas as pd
 import math
+import numpy as np
 
 def get_inputs():
     """Asks the user whether they want
@@ -102,6 +103,7 @@ def get_dfs(name, tournament):
     match_df = match_df.dropna('columns')
     match_df = match_df.replace(to_replace =':', value = '.', regex = True)
     match_df = match_df.replace(to_replace ='k', value = '', regex = True)
+    print(match_df)
 
     # change string elements to numeric
     match_df['K'] = pd.to_numeric(match_df['K'])
@@ -109,12 +111,9 @@ def get_dfs(name, tournament):
     match_df['A'] = pd.to_numeric(match_df['A'])
     match_df['CS'] = pd.to_numeric(match_df['CS'])
     match_df['Len'] = pd.to_numeric(match_df['Len'])
-    for i in range(len(match_df['Len'])):
-        original = match_df['Len'][i]
-        minute = math.floor(original)
-        seconds = (original - minute) / 0.6
-        length = minute + seconds
-        match_df.at[i, 'Len'] = length
+    match_df['min'] = match_df['Len'].apply(np.floor)
+    match_df['sec'] = (match_df['Len'] - match_df['min']) / 0.6
+    match_df['Len'] = match_df['min'] + match_df['sec']
     match_df['G'] = pd.to_numeric(match_df['G'])
 
     # filter champ table to just have necessary columns
