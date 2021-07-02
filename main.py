@@ -209,7 +209,7 @@ def solo_data(match_df, champ_df):
     player_stats['Winrate'] = round(wins / (wins + losses), 4) * 100
 
     # Top 5 Most Played Champions
-    player_stats['Champions'] = champ_df.head(5)['Champion']
+    player_stats['Champions'] = champ_df.head(5)['Champion'].tolist()
 
     return player_stats
 
