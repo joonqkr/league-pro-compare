@@ -103,7 +103,6 @@ def get_dfs(name, tournament):
     match_df = match_df.dropna('columns')
     match_df = match_df.replace(to_replace =':', value = '.', regex = True)
     match_df = match_df.replace(to_replace ='k', value = '', regex = True)
-    print(match_df)
 
     # change string elements to numeric
     match_df['K'] = pd.to_numeric(match_df['K'])
@@ -211,7 +210,6 @@ def solo_data(match_df, champ_df):
 
     # Top 3 Most Played Champions
     champions = []
-    print(champ_df.columns)
     for i in range(5):
         champions.append(champ_df.at[i, 'Champion'])
     player_stats['Champions'] = champions
