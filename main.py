@@ -208,11 +208,8 @@ def solo_data(match_df, champ_df):
     losses = lose_df.shape[0]
     player_stats['Winrate'] = round(wins / (wins + losses), 4) * 100
 
-    # Top 3 Most Played Champions
-    champions = []
-    for i in range(5):
-        champions.append(champ_df.at[i, 'Champion'])
-    player_stats['Champions'] = champions
+    # Top 5 Most Played Champions
+    player_stats['Champions'] = champ_df.head(5)['Champion']
 
     return player_stats
 
@@ -247,7 +244,7 @@ def duo_data(match_df1, champ_df1, match_df2, champ_df2):
     comp_stats['Overall CS/M'] = [p1_overall['CS/M'], p2_overall['CS/M']]
     comp_stats['Overall Gold'] = [p1_overall['Gold'], p2_overall['Gold']]
     comp_stats['Overall Winrate'] = [p1_overall['Winrate'], p2_overall['Winrate']]
-    comp_stats['Common Top 5 Champions'] = list(set(p1_overall['Champions']).intersection(p1_overall['Champions']))
+    comp_stats['Common Top 5 Champions'] = list(set(p1_overall['Champions']).intersection(p2_overall['Champions']))
 
     # head-to-head match match history
     h2h = pd.merge(match_df1, match_df2, on=['Date', 'Len'], suffixes=('_1', '_2'))
