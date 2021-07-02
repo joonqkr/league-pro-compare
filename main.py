@@ -96,8 +96,9 @@ def get_dfs(name, tournament):
 
     # filter match history table to just have necessary columns and rows
     match_df = match_df.droplevel(0, 1)
-    match_df = match_df.dropna(subset=['VOD'])
-    match_df = match_df.drop(match_df.shape[0] - 1)
+    match_df = match_df.dropna(subset=['Date', 'Tournament', 'W/L',
+    'Len', 'K', 'D', 'A', 'CS', 'G'])
+    match_df.drop(match_df.tail(1).index,inplace=True)
     match_df = match_df.dropna('columns')
     match_df = match_df.replace(to_replace =':', value = '.', regex = True)
     match_df = match_df.replace(to_replace ='k', value = '', regex = True)
@@ -153,10 +154,11 @@ def get_tourns(name):
     # get player's tournament history
     history = dfs[5]
     history = history.droplevel(0, 1)
-    print(history)
 
     # convert column values into list
     tourns = history['Event'].values.tolist()
+
+    # replace names to ones that can be recognized by query
     tourn = []
     for t in tourns:
         if "KeSPA" in t:
@@ -167,8 +169,8 @@ def get_tourns(name):
             t = t + ' season world championship/main event'
         fixed = t.replace(' ', '%20')
         tourn.append(fixed)
-    print(tourn)
-    return
+
+    return tourn
 
 def solo_data(match_df, champ_df):
     """Returns data on one player when only one player is input.
@@ -282,42 +284,45 @@ def duo_data(match_df1, champ_df1, match_df2, champ_df2):
     return comp_stats
 
 if __name__ == "__main__":
+    # get user input
+    duo, names, tournaments = get_inputs()
 
-    get_tourns("ShowMaker")
-    # duo, names, tournaments = get_inputs()
-    # if duo:
-    #     matches, champs = [], []
-    #     for t in tournaments[0]:
-    #         match, champ = get_dfs(names[0], t)
-    #         matches.append(match)
-    #         champs.append(champ)
-    #     p1_match = pd.concat(matches)
-    #     champs = pd.concat(champs)
-    #     p1_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
-    #     p1_champ = p1_champ.sort_values(by=['G'])
-    #
-    #     matches, champs = [], []
-    #     for t in tournaments[1]:
-    #         match, champ = get_dfs(names[1], t)
-    #         matches.append(match)
-    #         champs.append(champ)
-    #     p2_match = pd.concat(matches)
-    #     champs = pd.concat(champs)
-    #     p2_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
-    #     p2_champ = p2_champ.sort_values(by=['G'])
-    #
-    #     stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
-    # else:
-    #     matches, champs = [], []
-    #     for t in tournaments[0]:
-    #         match, champ = get_dfs(names[0], t)
-    #         matches.append(match)
-    #         champs.append(champ)
-    #     p1_match = pd.concat(matches)
-    #     champs = pd.concat(champs)
-    #     p1_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
-    #     p1_champ = p1_champ.sort_values(by=['G'])
-    #
-    #     stats = solo_data(p1_match, p1_champ)
-    #
-    # print(stats)
+    # if it's duo or solo data
+    if duo:
+        # player 1
+        matches, champs = [], []
+        for t in tournaments[0]:
+            match, champ = get_dfs(names[0], t)
+            matches.append(match)
+            champs.append(champ)
+        p1_match = pd.concat(matches)
+        champs = pd.concat(champs)
+        p1_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
+        p1_champ = p1_champ.sort_values(by=['G'], ascending=False)
+
+        # player 2
+        matches, champs = [], []
+        for t in tournaments[1]:
+            match, champ = get_dfs(names[1], t)
+            matches.append(match)
+            champs.append(champ)
+        p2_match = pd.concat(matches)
+        champs = pd.concat(champs)
+        p2_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
+        p2_champ = p2_champ.sort_values(by=['G'], ascending=False)
+
+        stats = duo_data(p1_match, p1_champ, p2_match, p2_champ)
+    else:
+        matches, champs = [], []
+        for t in tournaments[0]:
+            match, champ = get_dfs(names[0], t)
+            matches.append(match)
+            champs.append(champ)
+        p1_match = pd.concat(matches)
+        champs = pd.concat(champs)
+        p1_champ = champs.groupby(by=['Champion'], sort=False, as_index=False).sum()
+        p1_champ = p1_champ.sort_values(by=['G'], ascending=False)
+
+        stats = solo_data(p1_match, p1_champ)
+
+    print(stats)
