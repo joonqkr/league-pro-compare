@@ -286,9 +286,12 @@ if __name__ == "__main__":
 
     # if it's duo or solo data
     if duo:
+        # find common tournaments
+        common_tourn = list(set(tournaments[0]).intersection(tournaments[1]))
+
         # player 1
         matches, champs = [], []
-        for t in tournaments[0]:
+        for t in common_tourn:
             match, champ = get_dfs(names[0], t)
             matches.append(match)
             champs.append(champ)
@@ -299,7 +302,7 @@ if __name__ == "__main__":
 
         # player 2
         matches, champs = [], []
-        for t in tournaments[1]:
+        for t in common_tourn:
             match, champ = get_dfs(names[1], t)
             matches.append(match)
             champs.append(champ)
